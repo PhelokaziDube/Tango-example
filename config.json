@@ -1,0 +1,32 @@
+{
+    "servers": {
+        "PowerSupply": {
+            "test": {
+                "PowerSupply": {
+                    "test/power_supply/1": {}
+             }
+           }
+        },
+        "CalendarClock": {
+            "test": {
+                "CalendarClockDevice":  {
+                    "test/calendarclockdevice/1": {}
+             }
+           }
+        },
+        "EventReceiver": {
+            "test": {
+                "EventReceiver":  {
+                    "test/eventreceiver/1": {}
+             }
+           }
+        },
+        "Motor": {
+            "test": {
+                "Motor": {
+                    "test/motor/1": {}
+                }
+            }
+        }
+    }
+}
