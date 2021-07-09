@@ -53,5 +53,29 @@ services:
     command: json2tango tangodb/config.json -w
     volumes:
       - /home/phelokazi/k/tango-example:/tangodb
-      
+  
+  calenderclock:
+    image: nexus.engageska-portugal.pt/ska-tango-images/pytango-runtime:9.3.3.3
+    depends_on:
+      - dsconfig
+    environment:
+      - TANGO_HOST=databaseds:10000
+    command: sleep infinity
+  
+  eventreceiver:
+    image: nexus.engageska-portugal.pt/ska-tango-images/pytango-runtime:9.3.3.3
+    depends_on:
+      - dsconfig
+    environment:
+      - TANGO_HOST=databaseds:10000
+    command: sleep infinity
+  
+  motor:
+    image: nexus.engageska-portugal.pt/ska-tango-images/pytango-runtime:9.3.3.3
+    depends_on:
+      - dsconfig
+    environment:
+      - TANGO_HOST=databaseds:10000
+    command: sleep infinity
+     
 
