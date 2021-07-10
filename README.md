@@ -1,3 +1,3 @@
 # Tango-example
-This project is an example of how a Tango device using s the JSON based device config system.
+This project is an example of how to run a Tango device using s the JSON based device config system.
 To start with the project you create a JSON file(config.json) to have device configuration for your devices in tango examples. On your docker-compose. yml file include your config.json file under the dsconfig service on command you write `json2tango config.json`.  You then run it using `json2tango config.json`. You can mount your config.json file to your dsconfig service. The config.json file should be in your container after starting up. Create services for the your devices: event-reciever, motor, calendarclock (with command `sleep infinity`).
