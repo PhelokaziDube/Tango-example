@@ -53,6 +53,14 @@ services:
     command: json2tango tangodb/config.json -w
     volumes:
       - /home/phelokazi/k/tango-example:/tangodb
+
+  powersupply:
+    image: artefact.skao.int/ska-tango-examples:0.4.15
+    depends_on:
+        - dsconfig
+    environment:
+      - TANGO_HOST=databaseds:10000
+    command: python /app/src/ska_tango_examples/basic_example/powersupply.py test
   
   calenderclock:
     image: artefact.skao.int/ska-tango-examples:0.4.15
@@ -60,7 +68,7 @@ services:
       - dsconfig
     environment:
       - TANGO_HOST=databaseds:10000
-    command: sleep infinity
+    command: python CalendarClock.py test
   
   eventreceiver:
     image: artefact.skao.int/ska-tango-examples:0.4.15
