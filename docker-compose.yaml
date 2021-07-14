@@ -68,7 +68,7 @@ services:
       - dsconfig
     environment:
       - TANGO_HOST=databaseds:10000
-    command: python CalendarClock.py test
+    command: python /app/src/ska_tango_examples/teams/CalendarClock.py test
   
   eventreceiver:
     image: artefact.skao.int/ska-tango-examples:0.4.15
