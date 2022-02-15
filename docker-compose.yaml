@@ -14,7 +14,7 @@ volumes:
 
 services:
   tangodb:
-    image: nexus.engageska-portugal.pt/ska-docker/tango-db:latest
+    image: artefact.skao.int/ska-tango-images-tango-db:10.4.14
     environment:
       - MYSQL_ROOT_PASSWORD=secret
       - MYSQL_DATABASE=tango
@@ -24,7 +24,7 @@ services:
       - tangodb:/var/lib/mysql
 
   databaseds:
-    image: nexus.engageska-portugal.pt/ska-docker/tango-databaseds:latest
+    image: artefact.skao.int/ska-tango-images-tango-databaseds:5.16.4
     depends_on:
       - tangodb
     environment:
@@ -45,7 +45,7 @@ services:
       - giop:tcp::10000
 
   dsconfig:
-    image: nexus.engageska-portugal.pt/ska-docker/tango-dsconfig:1.5.0
+    image: artefact.skao.int/ska-tango-images-tango-dsconfig:1.5.3
     depends_on:
       - databaseds
     environment:
