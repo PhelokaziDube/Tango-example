@@ -1,0 +1,276 @@
+apiVersion: v1
+items:
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        io.kompose.service: calenderclock
+      name: calenderclock
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          io.kompose.service: calenderclock
+      strategy: {}
+      template:
+        metadata:
+          labels:
+            io.kompose.service: calenderclock
+        spec:
+          containers:
+            - args:
+                - python
+                - /app/src/ska_tango_examples/teams/CalendarClock.py
+                - test
+              env:
+                - name: TANGO_HOST
+                  value: databaseds:10000
+              image: artefact.skao.int/ska-tango-examples:0.4.15
+              name: calenderclock
+              resources: {}
+          restartPolicy: Always
+    status: {}
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        io.kompose.service: databaseds
+      name: databaseds
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          io.kompose.service: databaseds
+      strategy: {}
+      template:
+        metadata:
+          labels:
+            io.kompose.service: databaseds
+        spec:
+          containers:
+            - command:
+                - /usr/local/bin/wait-for-it.sh
+                - tangodb:3306
+                - --timeout=30
+                - --strict
+                - --
+                - /usr/local/bin/DataBaseds
+                - "2"
+                - -ORBendPoint
+                - giop:tcp::10000
+              env:
+                - name: MYSQL_DATABASE
+                  value: tango
+                - name: MYSQL_HOST
+                  value: tangodb:3306
+                - name: MYSQL_PASSWORD
+                  value: tango
+                - name: MYSQL_USER
+                  value: tango
+                - name: TANGO_HOST
+                  value: databaseds:10000
+              image: artefact.skao.int/ska-tango-images-tango-databaseds:5.16.4
+              name: databaseds
+              resources: {}
+          restartPolicy: Always
+    status: {}
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        io.kompose.service: dsconfig
+      name: dsconfig
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          io.kompose.service: dsconfig
+      strategy:
+        type: Recreate
+      template:
+        metadata:
+          labels:
+            io.kompose.service: dsconfig
+        spec:
+          containers:
+            - args:
+                - sleep
+                - infinity
+              env:
+                - name: TANGO_HOST
+                  value: databaseds:10000
+              image: artefact.skao.int/ska-tango-images-tango-dsconfig:1.5.1
+              name: dsconfig
+              resources: {}
+              volumeMounts:
+                - mountPath: /tangodb
+                  name: dsconfig-claim0
+          restartPolicy: Always
+          volumes:
+            - name: dsconfig-claim0
+              persistentVolumeClaim:
+                claimName: dsconfig-claim0
+    status: {}
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: dsconfig-claim0
+      name: dsconfig-claim0
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Mi
+    status: {}
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+     
+      labels:
+        io.kompose.service: eventreceiver
+      name: eventreceiver
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          io.kompose.service: eventreceiver
+      strategy: {}
+      template:
+        metadata:
+          labels:
+            io.kompose.service: eventreceiver
+        spec:
+          containers:
+            - args:
+                - sleep
+                - infinity
+              env:
+                - name: TANGO_HOST
+                  value: databaseds:10000
+              image: artefact.skao.int/ska-tango-examples:0.4.15
+              name: eventreceiver
+              resources: {}
+          restartPolicy: Always
+    status: {}
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+     
+      labels:
+        io.kompose.service: motor
+      name: motor
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          io.kompose.service: motor
+      strategy: {}
+      template:
+        metadata:
+          labels:
+            io.kompose.service: motor
+        spec:
+          containers:
+            - args:
+                - python
+                - /app/src/ska_tango_examples/basic_example/Motor.py
+                - test
+              env:
+                - name: TANGO_HOST
+                  value: databaseds:10000
+              image: artefact.skao.int/ska-tango-examples:0.4.15
+              name: motor
+              resources: {}
+          restartPolicy: Always
+    status: {}
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        io.kompose.service: powersupply
+      name: powersupply
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          io.kompose.service: powersupply
+      strategy: {}
+      template:
+        metadata:
+          labels:
+            io.kompose.service: powersupply
+        spec:
+          containers:
+            - args:
+                - python
+                - /app/src/ska_tango_examples/basic_example/powersupply.py
+                - test
+              env:
+                - name: TANGO_HOST
+                  value: databaseds:10000
+              image: artefact.skao.int/ska-tango-examples:0.4.15
+              name: powersupply
+              resources: {}
+          restartPolicy: Always
+    status: {}
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        io.kompose.service: tangodb
+      name: tangodb
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          io.kompose.service: tangodb
+      strategy:
+        type: Recreate
+      template:
+        metadata:
+        
+          labels:
+            io.kompose.service: tangodb
+        spec:
+          containers:
+            - env:
+                - name: MYSQL_DATABASE
+                  value: tango
+                - name: MYSQL_PASSWORD
+                  value: tango
+                - name: MYSQL_ROOT_PASSWORD
+                  value: secret
+                - name: MYSQL_USER
+                  value: tango
+              image: artefact.skao.int/ska-tango-images-tango-db:10.4.14
+              name: tangodb
+              resources: {}
+              volumeMounts:
+                - mountPath: /var/lib/mysql
+                  name: tangoexample-tangodb
+          restartPolicy: Always
+          volumes:
+            - name: tangoexample-tangodb
+              persistentVolumeClaim:
+                claimName: tangoexample-tangodb
+    status: {}
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: tangoexample-tangodb
+      name: tangoexample-tangodb
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Mi
+    status: {}
+kind: List
+metadata: {}
+
