@@ -18,13 +18,8 @@ PYTHON_VARS_BEFORE_PYTEST ?= PYTHONPATH=.:./src \
 
 
 # include makefile targets from the submodule
--include .make/ansible.mk
--include .make/cpp.mk
 -include .make/k8s.mk
 -include .make/helm.mk
--include .make/oci.mk
--include .make/base.mk
--include .make/docs.mk
 
 # include your own private variables for custom deployment configuration
 -include PrivateRules.mak
