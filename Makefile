@@ -2,7 +2,7 @@
 SHELL=/bin/bash
 .SHELLFLAGS=-o pipefail -c
 
-NAME=ska-dish-lmc
+NAME=Tango-example
 
 VERSION=1.0.0
 IMAGE=$(CAR_OCI_REGISTRY_HOST)/$(NAME)
