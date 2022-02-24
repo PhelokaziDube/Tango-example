@@ -1,0 +1,15 @@
+apiVersion: v2
+appVersion: "1.0"
+description: A Helm chart for deploying Tango-example on Kubernetes
+name: Tango-example
+version: 1.0.0
+home: https://gitlab.com/ska-telescope/ska-dsh-lmc/
+icon: https://www.skatelescope.org/wp-content/uploads/2016/07/09545_NEW_LOGO_2014.png
+dependencies:
+- name: ska-tango-base
+  version: 0.3.5
+  repository: https://artefact.skao.int/repository/helm-internal
+  condition: ska-tango-base.enabled,global.sub-system.ska-tango-base.enabled
+- name: ska-tango-util
+  version: 0.3.5
+  repository: https://artefact.skao.int/repository/helm-internal
